@@ -1,22 +1,20 @@
-<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My FastAPI App{% endblock %}</title>
-</head>
-<body>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+  </head>
+  <body>
     <header>
-        <h1>My FastAPI Application</h1>
+      {% block title %}{% endblock %}
+      <!-- Navigation bar, logo, etc. -->
     </header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+    {% block content %} {% endblock %}
 
     <footer>
-        <p>&copy; 2024 Doggo App</p>
+      <p>&copy;Wagg.ly 2024</p>
     </footer>
-</body>
+  </body>
 </html>

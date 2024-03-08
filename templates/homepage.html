@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Wagg.ly{% endblock %}
+
+{% block content %}
+<header>
+    <!-- Assuming you have authentication status available -->
+    {% if user_authenticated %}
+    <p>Welcome, {{ user_name }}!</p>
+    {% else %}
+    <a href="/login">Login</a> | <a href="/register">Register</a>
+    {% endif %}
+</header>
+
+<main>
+    <h1>Welcome to Wagg.ly</h1>
+    <section>
+        <h2>Registered Dogs</h2>
+        <ul>
+            {% for dog in dogs %}
+            <li>{{ dog.name }} - {{ dog.breed }} - {{ dog.age }} years old</li>
+            {% else %}
+            <p>No dogs registered yet.</p>
+            {% endfor %}
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Registered Dog Walkers</h2>
+        <ul>
+            {% for walker in walkers %}
+            <li>{{ walker.name }} - {{ walker.experience }} years experience</li>
+            {% else %}
+            <p>No dog walkers registered yet.</p>
+            {% endfor %}
+        </ul>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Wagg.ly{% endblock %}
+
+{% block content %}
+<h1>Registration</h1>
+<form action="/register" method="post">
+    <!-- Existing fields for email, password -->
+    <input type="radio" id="dog-owner" name="user-type" value="dog-owner" checked>
+    <label for="dog-owner">Dog Owner</label>
+    <input type="radio" id="dog-walker" name="user-type" value="dog-walker">
+    <label for="dog-walker">Dog Walker</label><br>
+    
+    <!-- Client-side script will handle showing/hiding -->
+    <div id="dog-details" style="display:none;">
+        <!-- Input fields for dog details -->
+    </div>
+    
+    <button type="submit">Register</button>
+</form>
+
+<script nonce="sdasd">
+    // Your existing JavaScript here
+</script>
+{% endblock %}

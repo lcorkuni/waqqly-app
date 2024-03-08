@@ -1,9 +1,14 @@
-<!-- templates/login.html -->
 {% extends "base.html" %}
 
-{% block title %}Login Page{% endblock %}
+{% block title %}Wagg.ly - Login{% endblock %}
 
 {% block content %}
-    <h2>Welcome to the Login Page</h2>
-    <p>{{ message }}</p>
+<form action="/login" method="post">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br>
+    <label for="register-lab">No account? Click here to </label><a href="/register">Register</a>
+    <button type="submit">Login</button>
+</form>
 {% endblock %}
