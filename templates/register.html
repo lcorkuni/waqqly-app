@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Register - Wagg.ly{% endblock %}
+{% block title %}Wagg.ly - Registration{% endblock %}
 
 {% block content %}
-<h1>Registration</h1>
 <form action="/register" method="post">
-    <!-- Existing fields for email, password -->
-    <input type="radio" id="dog-owner" name="user-type" value="dog-owner" checked>
-    <label for="dog-owner">Dog Owner</label>
-    <input type="radio" id="dog-walker" name="user-type" value="dog-walker">
-    <label for="dog-walker">Dog Walker</label><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br>
+    <label for="password">Re-enter password:</label>
+    <input type="password" id="password" name="password" required><br>
+    <label for="owner-walker-lab">Are you a dog walker or dog owner?</label><br>
+    <input type="radio" id="dog-walker" name="user-type" value="dog-walker" checked>
+    <label for="dog-walker">Dog Walker</label>
+    <input type="radio" id="dog-owner" name="user-type" value="dog-owner">
+    <label for="dog-owner">Dog Owner</label><br>
     
     <!-- Client-side script will handle showing/hiding -->
     <div id="dog-details" style="display:none;">
