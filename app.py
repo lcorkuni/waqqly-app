@@ -57,6 +57,5 @@ async def user_sign_up(request: Request):
 async def sign_out(request: Request):
     return HTTPStatus.OK
 
-
-# Start the application
-uvicorn.run(app, host='0.0.0.0', port=8888)
+if __name__ == "__main__":
+    uvicorn.run("app:app", port=5000, log_level="info", reload=True)

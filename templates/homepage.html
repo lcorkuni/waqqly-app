@@ -5,13 +5,11 @@
 {% block content %}
 <header>
     <!-- Assuming you have authentication status available -->
-    <navigation>
-        {% if user_authenticated %
-        <p>Welcome, {{ user_name }}!</p>}<!--add sign out-->
-        {% else %}
-        <a href="/login">Login</a> | <a href="/register">Register</a>
-        {% endif %}
-    </navigation>
+    {% if user_authenticated %}
+    <p>Welcome, {{ user_name }}!</p><!--add sign out-->
+    {% else %}
+    <a href="/login">Login</a> | <a href="/register">Register</a>
+    {% endif %}
 </header>
 
 <main>
