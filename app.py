@@ -17,10 +17,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("", include_in_schema=False, status_code=HTTPStatus.TEMPORARY_REDIRECT)
 @app.get("/", include_in_schema=False, status_code=HTTPStatus.TEMPORARY_REDIRECT)
 async def redirect_homepage():
-    return RedirectResponse("/homepage")
+    return RedirectResponse("/home")
 
 
-@app.get("/homepage", response_class=HTMLResponse,
+@app.get("/home", response_class=HTMLResponse,
          status_code=HTTPStatus.OK,
          summary="Returns the Homepage Page HTML")
 async def homepage(request: Request):
