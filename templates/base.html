@@ -4,15 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
   </head>
   <body>
     <header>
       {% block title %}{% endblock %}
       <!-- Navigation bar, logo, etc. -->
     </header>
-
-    {% block content %} {% endblock %}
+    <content>{% block content %}{% endblock %}</content>
 
     <footer>
       <p>&copy;Wagg.ly 2024</p>

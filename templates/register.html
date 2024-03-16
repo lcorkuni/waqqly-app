@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Wagg.ly - Registration{% endblock %}
+{% block title %}Waqq.ly - Registration{% endblock %}
 
 {% block content %}
 <form action="/register" method="post">
@@ -8,23 +8,28 @@
     <input type="email" id="email" name="email" required><br>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br>
-    <label for="password">Re-enter password:</label>
-    <input type="password" id="password" name="password" required><br>
-    <label for="owner-walker-lab">Are you a dog walker or dog owner?</label><br>
+    <label for="confirm-password">Re-enter password:</label>
+    <input type="password" id="confirm-password" name="confirm-password" required><br>
+
+    <label>Are you a dog walker or dog owner?</label><br>
     <input type="radio" id="dog-walker" name="user-type" value="dog-walker" checked>
     <label for="dog-walker">Dog Walker</label>
     <input type="radio" id="dog-owner" name="user-type" value="dog-owner">
     <label for="dog-owner">Dog Owner</label><br>
-    
-    <!-- Client-side script will handle showing/hiding -->
-    <div id="dog-details" style="display:none;">
-        <!-- Input fields for dog details -->
-    </div>
-    
-    <button type="submit">Register</button>
-</form>
 
-<script nonce="sdasd">
-    // Your existing JavaScript here
-</script>
+    <div id="dog-owner-details" style="display:none;">
+        <button type="button" id="add-dog-button">Add Dog</button>
+    </div>
+
+    <div id="dog-walker-details" style="display:none;">
+        <label for="walker-name">Walker Name:</label>
+        <input type="text" id="walker-name" name="walker-name" readonly><br>
+        <label for="walker-age">Walker Age:</label>
+        <input type="number" id="walker-age" name="walker-age" min="18" readonly><br>
+    </div>
+
+    <button type="submit">Register</button>
+    <label for="login-lab">Back to </label><a href="/login">Login</a>
+</form>
+<script src="/static/javascript/userTypeToggle.js"></script>
 {% endblock %}

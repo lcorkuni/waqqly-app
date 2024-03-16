@@ -1,0 +1,60 @@
+/* Basic Reset */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh; /* Ensure the body takes at least the viewport height */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    text-align: center;
+    font-family: 'Arial', sans-serif; /* Consistent font */
+    background-color: #f0f0f0; /* Light grey background */
+}
+
+/* Header and Footer */
+header, footer {
+    color: #ffffff;
+    background-color: #2B9348;
+}
+
+header {
+    padding: 20px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+footer {
+    margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+/* Main Content */
+.container {
+    flex: 1; /* Allows container to expand and fill available space */
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    box-sizing: border-box; /* Include padding in the box's dimensions */
+}
+
+/* Form and Input Styling */
+input, select, button {
+    padding: 10px;
+    margin: 10px 0; /* Add vertical margin for spacing, remove horizontal margin */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: calc(100% - 22px); /* Adjust for padding and ensure inputs don't overflow their containers */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+form {
+    width: 90%; /* Use 90% of the container width */
+    max-width: 800px; /* Maximum width to prevent overly wide forms on large screens */
+    margin: 0 auto; /* Center form horizontally */
+}
+
+/* Add padding below the radio buttons */
+input[type="radio"] {
+    margin-bottom: 20px;
+}
