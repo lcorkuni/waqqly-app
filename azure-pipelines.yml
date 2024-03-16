@@ -31,7 +31,7 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-- task: CopyStaticFiles@2
+- task: CopyFiles@2
   inputs:
     SourceFolder: './static'  # Specify the path to your static files directory
     Contents: '**'
