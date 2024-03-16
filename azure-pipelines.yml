@@ -3,6 +3,7 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
+
 strategy:
   matrix:
     Python310:
@@ -30,15 +31,6 @@ steps:
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: './static'  # Specify the path to your static files directory
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/static'  # Destination folder in the artifact
-    CleanTargetFolder: true
-    OverWrite: true
-  displayName: 'Copy static files'
 
 - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
   displayName: 'Upload package'
