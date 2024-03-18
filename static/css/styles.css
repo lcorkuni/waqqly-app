@@ -12,7 +12,7 @@ html, body {
 }
 
 /* Header and Footer */
-header, footer {
+header, footer, button {
     color: #ffffff;
     background-color: #2B9348;
 }
@@ -24,7 +24,8 @@ header {
 }
 
 footer {
-    margin-top: auto; /* Pushes the footer to the bottom */
+    margin-top: auto;
+    width: 100%;
 }
 
 /* Main Content */
@@ -39,7 +40,7 @@ footer {
 }
 
 /* Form and Input Styling */
-input, select, button {
+input[type="text"], input[type="password"], input[type="email"], input[type="number"], select, button {
     padding: 10px;
     margin: 10px 0; /* Add vertical margin for spacing, remove horizontal margin */
     border: 1px solid #ddd;
@@ -54,7 +55,16 @@ form {
     margin: 0 auto; /* Center form horizontally */
 }
 
+/* Add padding to labels */
+label:not([for="radio-lab"]):not([for="ref-lab"]) {
+    display: block;
+    margin-top: 15px; /* Add padding only above the label */
+}
+
 /* Add padding below the radio buttons */
 input[type="radio"] {
-    margin-bottom: 20px;
+    margin-top: 10px;
+}
+button {
+    margin-bottom:30px
 }
