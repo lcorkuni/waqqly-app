@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import json
 import uvicorn
 
 from typing import Optional
@@ -8,7 +8,7 @@ from http import HTTPStatus
 from typing import Annotated
 from datetime import timedelta
 
-from fastapi import FastAPI, HTTPException, Request, Response, Cookie, Depends
+from fastapi import FastAPI, HTTPException, Request, Response, Cookie, Depends, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
@@ -45,24 +45,31 @@ async def authorization_middleware(request: Request, call_next):
         if "/docs" in request.url.path:
             if access_token is None:
                 return JSONResponse(
-                    content={"details": "UNAUTHORIZED: No account is logged in"}, status_code=HTTPStatus.UNAUTHORIZED)
+                    content={"detail": "UNAUTHORIZED: No account is logged in"}, status_code=HTTPStatus.UNAUTHORIZED)
             current_user = await get_current_user(access_token)
             if current_user.type != UserType.admin:
                 return JSONResponse(
-                    content={"details": "UNAUTHORIZED: User is not admin"}, status_code=HTTPStatus.UNAUTHORIZED)
+                    content={"detail": "UNAUTHORIZED: User is not admin"}, status_code=HTTPStatus.UNAUTHORIZED)
     except HTTPException:
         return JSONResponse(
-            content={"details": "UNAUTHORIZED: Could not validate credentials"}, status_code=HTTPStatus.UNAUTHORIZED)
+            content={"detail": "UNAUTHORIZED: Could not validate credentials"}, status_code=HTTPStatus.UNAUTHORIZED)
 
     response = await call_next(request)
     return response
 
 
-# @app.middleware("http")
-# async def unauthorized_page(request: Request, call_next):
-#     response = await call_next(request)
-#     if response.status_code == HTTPStatus.UNAUTHORIZED:
-#         return templates.TemplateResponse(name="unauthorized.html", context={"details": response.details})
+@app.middleware("http")
+async def unauthorized_page(request: Request, call_next):
+    response = await call_next(request)
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
+        response_body = b""
+        async for chunk in response.body_iterator:
+            response_body += chunk
+        details = json.loads(response_body.decode())["detail"]
+        headers = {'Location': f'/unauthorized?msg={details}'}
+        return Response(content=details, headers=headers,
+                        status_code=HTTPStatus.TEMPORARY_REDIRECT)
+    return response
 
 
 @app.get("", include_in_schema=False, status_code=HTTPStatus.TEMPORARY_REDIRECT)
@@ -85,11 +92,17 @@ async def register(request: Request):
     return templates.TemplateResponse(name="register.html", context={"request": request})
 
 
+@app.get("/unauthorized", response_class=HTMLResponse, status_code=HTTPStatus.OK,
+         summary="Returns the Register Page HTML", tags=["Frontend"])
+async def unauthorized(request: Request, msg: str = None):
+    return templates.TemplateResponse(name="unauthorized.html", context={"request": request, "msg": msg})
+
+
 @app.get("/home", response_class=HTMLResponse,
          status_code=HTTPStatus.OK,
          summary="Returns the Homepage Page HTML", tags=["Frontend"])
 async def homepage(request: Request, current_user: Annotated[User, Depends(get_current_user)]):
-    return templates.TemplateResponse(name="homepage.html", context={"request": request})
+    return templates.TemplateResponse(name="homepage.html", context={"request": request, "username": current_user.username})
 
 
 @app.post("/token", tags=["Backend"], response_class=JSONResponse)
@@ -117,7 +130,8 @@ async def login_for_access_token(
 @app.post("/logout")
 async def logout(response: Response):
     response.delete_cookie(key="access_token")
-    return {"message": "Cookies cleared, successfully logged out."}
+    headers = {'Location': '/login'}
+    return Response(headers=headers, status_code=HTTPStatus.FOUND)
 
 
 @app.get("/get_cookie", response_class=JSONResponse)
@@ -125,7 +139,7 @@ async def get_cookies(access_token: Optional[str] = Cookie(None)):
     try:
         return {"access_token": access_token}
     except Exception:
-        raise HTTPException("No cookie found", status_code=HTTPStatus.BAD_REQUEST)
+        raise HTTPException(detail="No cookie found", status_code=HTTPStatus.BAD_REQUEST)
 
 
 @app.get("/users/me/", response_model=User, tags=["Backend"])

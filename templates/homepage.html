@@ -1,19 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Home - Waqq.ly{% endblock %}
+{% block title %}Home - Wagg.ly{% endblock %}
 
 {% block content %}
 <header>
-    <!-- Assuming you have authentication status available -->
-    {% if user_authenticated %}
-    <p>Welcome, {{ user_name }}!</p><!--add sign out-->
-    {% else %}
-    <a href="/login">Login</a> | <a href="/register">Register</a>
+    <form action="/logout" method="post">
+        <button type="submit">Sign Out</button>
+    </form>
+    {% if user_is_admin %}
+    <a href="/docs">Docs</a>
     {% endif %}
 </header>
-
 <main>
-    <h1>Welcome to Wagg.ly</h1>
+    <h1>Welcome, {{ username }}!</h1>
     <section>
         <h2>Registered Dogs</h2>
         <ul>

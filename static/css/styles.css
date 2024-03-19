@@ -17,11 +17,21 @@ header, footer, button {
     background-color: #2B9348;
 }
 
+
 header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
     font-size: 40px;
     font-weight: 700;
 }
+header img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
 
 footer {
     margin-top: auto;
