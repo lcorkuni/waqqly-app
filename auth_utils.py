@@ -9,25 +9,10 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-import logging
 
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='app.log',
-    filemode='a'
-)
+from db_utils import users
+from log_conf import logger
 
-fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$9ReDGIZpDGaOwNdwmjuHReQbqlzEetYjCg532NHISYr/1hDWrClq2",
-        "type": "admin",
-    }
-}
 
 credentials_exception = HTTPException(
     status_code=HTTPStatus.UNAUTHORIZED,
@@ -41,7 +26,7 @@ try:
     ALGORITHM = os.getenv('ALGORITHM')
     ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES'))
 except Exception as e:
-    logging.error(f"BAD environment variables: {e}")
+    logger.error(f"BAD environment variables: {e}")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -54,6 +39,7 @@ class UserType(str, Enum):
 
 
 class User(BaseModel):
+    _id: str
     username: str
     email: str | None = None
     type: UserType | None = None
@@ -80,18 +66,19 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+def get_user(users_table, username: str):
+    for user in users_table.find():
+        if username in user["username"]:
+            return UserInDB(**user)
 
 
-def authenticate_user(fake_db, username: str, password: str):
-    user = get_user(fake_db, username)
+def authenticate_user(users_table, username: str, password: str):
+    user = get_user(users_table, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
         return False
+    logger.info(f"User {user.username} Authenticated")
     return user
 
 
@@ -115,7 +102,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(fake_users_db, username=token_data.username)
+    user = get_user(users, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user

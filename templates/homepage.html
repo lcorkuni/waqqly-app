@@ -4,9 +4,7 @@
 
 {% block content %}
 <header>
-    <form action="/logout" method="post">
-        <button type="submit">Sign Out</button>
-    </form>
+    <button id="sign-out-btn">Sign Out</button>
     {% if user_is_admin %}
     <a href="/docs">Docs</a>
     {% endif %}
@@ -35,4 +33,5 @@
         </ul>
     </section>
 </main>
+<script src="/static/js/signout.js"></script>
 {% endblock %}

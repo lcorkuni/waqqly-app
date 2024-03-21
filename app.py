@@ -8,7 +8,7 @@ from http import HTTPStatus
 from typing import Annotated
 from datetime import timedelta
 
-from fastapi import FastAPI, HTTPException, Request, Response, Cookie, Depends, Form
+from fastapi import FastAPI, HTTPException, Request, Response, Cookie, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
@@ -16,8 +16,10 @@ from fastapi.templating import Jinja2Templates
 
 from starlette.datastructures import MutableHeaders
 
-from auth_utils import logging, UserType, User, get_password_hash, get_current_user, authenticate_user, \
-    create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, fake_users_db
+from auth_utils import UserType, User, get_password_hash, get_current_user, authenticate_user, \
+    create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+
+from db_utils import users
 
 
 app = FastAPI(title="Wagg.ly", description="A dog walkers app", version="1.0")
@@ -59,14 +61,14 @@ async def authorization_middleware(request: Request, call_next):
 
 
 @app.middleware("http")
-async def unauthorized_page(request: Request, call_next):
+async def error_page(request: Request, call_next):
     response = await call_next(request)
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == HTTPStatus.UNAUTHORIZED or response.status_code == HTTPStatus.NOT_FOUND:
         response_body = b""
         async for chunk in response.body_iterator:
             response_body += chunk
         details = json.loads(response_body.decode())["detail"]
-        headers = {'Location': f'/unauthorized?msg={details}'}
+        headers = {'Location': f'/error?msg={details}'}
         return Response(content=details, headers=headers,
                         status_code=HTTPStatus.TEMPORARY_REDIRECT)
     return response
@@ -92,10 +94,10 @@ async def register(request: Request):
     return templates.TemplateResponse(name="register.html", context={"request": request})
 
 
-@app.get("/unauthorized", response_class=HTMLResponse, status_code=HTTPStatus.OK,
-         summary="Returns the Register Page HTML", tags=["Frontend"])
-async def unauthorized(request: Request, msg: str = None):
-    return templates.TemplateResponse(name="unauthorized.html", context={"request": request, "msg": msg})
+@app.get("/error", response_class=HTMLResponse, status_code=HTTPStatus.OK,
+         summary="Returns the UNAUTHORIZED Page HTML", tags=["Frontend"])
+async def error(request: Request, msg: str = None):
+    return templates.TemplateResponse(name="error.html", context={"request": request, "msg": msg})
 
 
 @app.get("/home", response_class=HTMLResponse,
@@ -110,7 +112,7 @@ async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> JSONResponse:
     user = authenticate_user(
-        fake_users_db, form_data.username, form_data.password)
+        users, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=HTTPStatus.UNAUTHORIZED,
@@ -127,14 +129,12 @@ async def login_for_access_token(
     return response
 
 
-@app.post("/logout")
-async def logout(response: Response):
+@app.get("/del_cookie", tags=["Backend"])
+async def delete_cookie(response: Response):
     response.delete_cookie(key="access_token")
-    headers = {'Location': '/login'}
-    return Response(headers=headers, status_code=HTTPStatus.FOUND)
 
 
-@app.get("/get_cookie", response_class=JSONResponse)
+@app.get("/get_cookie", response_class=JSONResponse, tags=["Dev"])
 async def get_cookies(access_token: Optional[str] = Cookie(None)):
     try:
         return {"access_token": access_token}
@@ -142,39 +142,24 @@ async def get_cookies(access_token: Optional[str] = Cookie(None)):
         raise HTTPException(detail="No cookie found", status_code=HTTPStatus.BAD_REQUEST)
 
 
-@app.get("/users/me/", response_model=User, tags=["Backend"])
+@app.get("/users/me/", response_model=User, tags=["Dev"])
 async def read_users_me(
     current_user: Annotated[User, Depends(get_current_user)]
 ):
     return current_user
 
 
-@app.get("/users/me/items/", tags=["Backend"])
+@app.get("/users/me/items/", tags=["Dev"])
 async def read_own_items(
     current_user: Annotated[User, Depends(get_current_user)]
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
 
 
-@app.get("/password-hash", tags=["Debug"])
+@app.get("/password-hash", tags=["Dev"])
 async def password_hash(password: str):
     return get_password_hash(password)
 
 
-@app.get("/user-sign-up",
-         status_code=HTTPStatus.OK,
-         summary="Register Page")
-async def user_sign_up():
-    return HTTPStatus.OK
-
-
-@app.get("/sign-out",
-         status_code=HTTPStatus.OK,
-         summary="Register Page")
-async def sign_out():
-    return HTTPStatus.OK
-
-
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     uvicorn.run("app:app", host="0.0.0.0", port=8000, log_level="info", reload=True)
