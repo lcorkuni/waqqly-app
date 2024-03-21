@@ -16,7 +16,7 @@ from fastapi.templating import Jinja2Templates
 
 from starlette.datastructures import MutableHeaders
 
-from app_utils import logging, UserType, User, get_password_hash, get_current_user, authenticate_user, \
+from auth_utils import logging, UserType, User, get_password_hash, get_current_user, authenticate_user, \
     create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, fake_users_db
 
 

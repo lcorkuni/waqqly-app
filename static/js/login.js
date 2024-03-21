@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
         if (response.ok) {
             window.location.href = '/home';
         } else {
-            const errorMessage = "No user found"; // Update to a more generic error message if necessary
+            const errorMessage = "No user found";
             document.getElementById('error-message').innerText = errorMessage;
             document.getElementById('error-message').style.display = 'block';
         }
