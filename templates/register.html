@@ -3,35 +3,65 @@
 {% block title %}Waqq.ly - Registration{% endblock %}
 
 {% block content %}
-<form action="/register" method="post">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
-    <label for="confirm-password">Re-enter password:</label>
-    <input type="password" id="confirm-password" name="confirm-password" required><br>
+<form>
+      <div class="d-grid col mx-auto">
+        <label for="inputEmail" class="form-label">Email</label>
+        <div>
+          <input type="email" class="form-control" id="inputEmail" required/>
+        </div>
+      </div>
+      <div class="d-grid col mx-auto">
+        <label for="inputUsername" class="form-label">Username</label>
+        <div>
+          <input type="text" class="form-control" id="inputUsername" required/>
+        </div>
+      </div>
+      <div class="d-grid col mx-auto">
+        <label for="inputPassword1" class="form-label">Password</label>
+        <div>
+          <input type="password" class="form-control" id="inputPassword1" required/>
+        </div>
+      </div>
+      <div class="d-grid col mx-auto">
+        <label for="inputPassword2" class="form-label">Re-enter Password</label>
+        <div>
+          <input type="password" class="form-control" id="inputPassword2" required/>
+        </div>
+      </div>
 
-    <label>Are you a dog walker or dog owner?</label>
-    <input type="radio" id="dog-walker" name="user-type" value="dog-walker" checked>
-    <label for="radio-lab">Dog Walker</label>
-    <input type="radio" id="dog-owner" name="user-type" value="dog-owner">
-    <label for="radio-lab">Dog Owner</label><br>
+    <label for="dog-walker" class="form-label">Are you a dog walker or dog owner?</label>
+    <div class="btn-group" role="group">
+      <input type="radio" class="btn-check" name="options-base" id="dog-walker" autocomplete="off" checked>
+      <label class="btn btn-outline-success" for="dog-walker" >Dog Walker</label>
+
+      <input type="radio" class="btn-check" name="options-base" id="dog-owner" autocomplete="off">
+      <label class="btn btn-outline-success" for="dog-owner" >Dog Owner</label>
+    </div><br><br>
 
     <div id="dog-owner-details" style="display:none;">
-        <button type="button" id="add-dog-button">Add Dog</button>
+        <button type="button" id="add-dog-button" class="btn btn-success">Add Dog</button>
     </div>
 
     <div id="dog-walker-details" style="display:none;">
-        <label for="walker-name">Walker Name:</label>
-        <input type="text" id="walker-name" name="walker-name" required><br>
-        <label for="walker-age">Walker Age:</label>
-        <input type="number" id="walker-age" name="walker-age" min="18" required><br>
+        <label class="form-label">Dog Walker Details</label>
+      <div class="row">
+        <div class="col-sm-5">
+          <input type="text" class="form-control" placeholder="First name" aria-label="First name" required>
+        </div>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" placeholder="Last name" aria-label="Last name" required>
+        </div>
+        <div class="col-sm-2">
+          <input type="number" class="form-control" placeholder="Age" aria-label="Age" min="18" max="90" required>
+        </div>
+      </div>
     </div>
+    <br>
+    <div class="d-grid col-7 mx-auto">
+      <p>Back to <a class="link-opacity-100-hover" href="/login">Login</a></p>
+      <button type="submit" id="register" class="btn btn-lg btn-success">Register</button>
+    </div><br><br>
 
-    <label for="ref-lab">Back to </label><a href="/login">Login</a>
-    <button type="submit">Register</button>
 </form>
 <script src="/static/js/userTypeToggle.js"></script>
 {% endblock %}

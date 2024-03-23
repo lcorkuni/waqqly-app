@@ -4,12 +4,22 @@
 
 {% block content %}
 <form id="login-form">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
-    <label for="ref-lab">No account? Click here to </label><a href="/register">Register</a>
-    <button type="submit">Login</button>
+    <div class="d-grid col mx-auto">
+        <label for="username" class="form-label">Username</label>
+        <div>
+          <input type="text" class="form-control" id="username" required/>
+        </div>
+      </div>
+    <div class="d-grid col mx-auto">
+        <label for="password" class="form-label">Password</label>
+        <div>
+          <input type="password" class="form-control" id="password" required/>
+        </div>
+      </div><br>
+    <div class="d-grid col-7 mx-auto">
+      <p>No account? Click here to <a class="link-opacity-100-hover" href="/register">Register</a></p>
+      <button type="submit" id="login" class="btn btn-lg btn-success">Login</button>
+    </div><br><br>
 </form>
 
 <div id="error-message" style="display: none; color: red;"></div>

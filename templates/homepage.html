@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Home - Wagg.ly{% endblock %}
+{% block title %}Home - Waqq.ly{% endblock %}
 
 {% block content %}
-<header>
+<main>
     <button id="sign-out-btn">Sign Out</button>
-    {% if user_is_admin %}
+    {% if admin %}
     <a href="/docs">Docs</a>
     {% endif %}
-</header>
-<main>
     <h1>Welcome, {{ username }}!</h1>
     <section>
         <h2>Registered Dogs</h2>

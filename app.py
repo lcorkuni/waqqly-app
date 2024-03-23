@@ -17,7 +17,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.datastructures import MutableHeaders
 
 from auth_utils import UserType, User, get_password_hash, get_current_user, authenticate_user, \
-    create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+    create_access_token, is_user_admin, ACCESS_TOKEN_EXPIRE_MINUTES
 
 from db_utils import users
 
@@ -104,7 +104,7 @@ async def error(request: Request, msg: str = None):
          status_code=HTTPStatus.OK,
          summary="Returns the Homepage Page HTML", tags=["Frontend"])
 async def homepage(request: Request, current_user: Annotated[User, Depends(get_current_user)]):
-    return templates.TemplateResponse(name="homepage.html", context={"request": request, "username": current_user.username})
+    return templates.TemplateResponse(name="homepage.html", context={"request": request, "username": current_user.username, "admin": is_user_admin(users, current_user.username)})
 
 
 @app.post("/token", tags=["Backend"], response_class=JSONResponse)

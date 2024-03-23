@@ -106,3 +106,10 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if user is None:
         raise credentials_exception
     return user
+
+def is_user_admin(users_table, username: str):
+    for user in users_table.find():
+        if username in user["username"]:
+            if UserType.admin in user["type"]:
+                return True
+    return False

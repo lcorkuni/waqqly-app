@@ -3,19 +3,24 @@ html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    min-height: 100vh; /* Ensure the body takes at least the viewport height */
+    min-height: 100vh;
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: column;
     text-align: center;
-    font-family: 'Arial', sans-serif; /* Consistent font */
-    background-color: #f0f0f0; /* Light grey background */
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
 }
 
 /* Header and Footer */
-header, footer, button {
+header, footer {
     color: #ffffff;
-    background-color: #2B9348;
+    background-color: #198754;
 }
+
+/* div {
+    display: flex;
+    justify-content: center;
+} */
 
 
 header {
@@ -47,16 +52,6 @@ footer {
     align-items: center;
     padding: 40px;
     box-sizing: border-box; /* Include padding in the box's dimensions */
-}
-
-/* Form and Input Styling */
-input[type="text"], input[type="password"], input[type="email"], input[type="number"], select, button {
-    padding: 10px;
-    margin: 10px 0; /* Add vertical margin for spacing, remove horizontal margin */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: calc(100% - 22px); /* Adjust for padding and ensure inputs don't overflow their containers */
-    box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
 form {
