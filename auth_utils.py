@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timedelta, timezone
-from enum import Enum
 from http import HTTPStatus
 from typing import Annotated
 
@@ -10,7 +9,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from db_utils import users
+from db_utils import users, UserType
 from log_conf import logger
 
 
@@ -30,12 +29,6 @@ except Exception as e:
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-
-class UserType(str, Enum):
-    walker = "walker"
-    owner = "owner"
-    admin = "admin"
 
 
 class User(BaseModel):
@@ -106,10 +99,3 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if user is None:
         raise credentials_exception
     return user
-
-def is_user_admin(users_table, username: str):
-    for user in users_table.find():
-        if username in user["username"]:
-            if UserType.admin in user["type"]:
-                return True
-    return False

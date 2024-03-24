@@ -4,16 +4,29 @@
 
 {% block content %}
 <main>
-    <button id="sign-out-btn">Sign Out</button>
-    {% if admin %}
-    <a href="/docs">Docs</a>
-    {% endif %}
+    <br>
+    <div class="col-3 mx-auto btn-group" role="group">
+        <button type="button" class="btn btn-success" id="sign-out-btn">Sign Out</button>
+        {% if type == "admin" %}
+        <a class="btn btn-primary" id="docs-btn" href="/docs">API Docs</a>
+        {% endif %}
+    </div><br><br>
     <h1>Welcome, {{ username }}!</h1>
+    <p>Account type: {{ type }}</p>
     <section>
         <h2>Registered Dogs</h2>
         <ul>
             {% for dog in dogs %}
-            <li>{{ dog.name }} - {{ dog.breed }} - {{ dog.age }} years old</li>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                          <th scope="col">Owner</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Breed</th>
+                          <th scope="col">Age</th>
+                        </tr>
+                    </thead>
+                </table>
             {% else %}
             <p>No dogs registered yet.</p>
             {% endfor %}
@@ -24,12 +37,20 @@
         <h2>Registered Dog Walkers</h2>
         <ul>
             {% for walker in walkers %}
-            <li>{{ walker.name }} - {{ walker.experience }} years experience</li>
+            <table class="table table-striped">
+                    <thead>
+                        <tr>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                          <th scope="col">Age</th>
+                        </tr>
+                    </thead>
+                </table>
             {% else %}
             <p>No dog walkers registered yet.</p>
             {% endfor %}
         </ul>
     </section>
 </main>
-<script src="/static/js/signout.js"></script>
+<script src="/static/js/signOut.js"></script>
 {% endblock %}

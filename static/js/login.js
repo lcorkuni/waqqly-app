@@ -18,8 +18,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
         if (response.ok) {
             window.location.href = '/home';
         } else {
-            const errorMessage = "No user found";
-            document.getElementById('error-message').innerText = errorMessage;
+            document.getElementById('error-message').innerText = "No user found";
             document.getElementById('error-message').style.display = 'block';
         }
     } catch (error) {

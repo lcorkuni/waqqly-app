@@ -73,3 +73,7 @@ input[type="radio"] {
 button {
     margin-bottom:30px
 }
+
+#spinner {
+    display: none; /* Initially hide the spinner */
+}

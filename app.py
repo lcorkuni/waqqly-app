@@ -16,11 +16,10 @@ from fastapi.templating import Jinja2Templates
 
 from starlette.datastructures import MutableHeaders
 
+from db_utils import insert_user, users
+from log_conf import logger
 from auth_utils import UserType, User, get_password_hash, get_current_user, authenticate_user, \
-    create_access_token, is_user_admin, ACCESS_TOKEN_EXPIRE_MINUTES
-
-from db_utils import users
-
+    create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 
 app = FastAPI(title="Wagg.ly", description="A dog walkers app", version="1.0")
 templates = Jinja2Templates(directory="templates")
@@ -94,6 +93,14 @@ async def register(request: Request):
     return templates.TemplateResponse(name="register.html", context={"request": request})
 
 
+@app.post("/signup", tags=["Backend"])
+async def signup(request: Request):
+    user_data = await request.json()
+    user_data["password"] = get_password_hash(user_data["password"])
+    logger.info(f"Registering user: {user_data}")
+    insert_user(user_data)
+
+
 @app.get("/error", response_class=HTMLResponse, status_code=HTTPStatus.OK,
          summary="Returns the UNAUTHORIZED Page HTML", tags=["Frontend"])
 async def error(request: Request, msg: str = None):
@@ -104,7 +111,8 @@ async def error(request: Request, msg: str = None):
          status_code=HTTPStatus.OK,
          summary="Returns the Homepage Page HTML", tags=["Frontend"])
 async def homepage(request: Request, current_user: Annotated[User, Depends(get_current_user)]):
-    return templates.TemplateResponse(name="homepage.html", context={"request": request, "username": current_user.username, "admin": is_user_admin(users, current_user.username)})
+    print(str(current_user.type))
+    return templates.TemplateResponse(name="homepage.html", context={"request": request, "username": current_user.username, "type": current_user.type.value})
 
 
 @app.post("/token", tags=["Backend"], response_class=JSONResponse)
