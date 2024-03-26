@@ -15,42 +15,63 @@
     <p>Account type: {{ type }}</p>
     <section>
         <h2>Registered Dogs</h2>
-        <ul>
-            {% for dog in dogs %}
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                          <th scope="col">Owner</th>
-                          <th scope="col">Name</th>
-                          <th scope="col">Breed</th>
-                          <th scope="col">Age</th>
-                        </tr>
-                    </thead>
-                </table>
-            {% else %}
-            <p>No dogs registered yet.</p>
-            {% endfor %}
-        </ul>
-    </section>
-    
+        {% if dogs_table %}
+        <div class="d-grid col-7 mx-auto">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Owners Username</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Breed</th>
+                        <th scope="col">Age</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dog in dogs_table %}
+                    <tr>
+                        <td>{{ dog['Owners Username'] }}</td>
+                        <td>{{ dog['Name'] }}</td>
+                        <td>{{ dog['Breed'] }}</td>
+                        <td>{{ dog['Age'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No dogs registered yet.</p>
+        {% endif %}
+    </section><br>
+
     <section>
         <h2>Registered Dog Walkers</h2>
-        <ul>
-            {% for walker in walkers %}
-            <table class="table table-striped">
-                    <thead>
-                        <tr>
-                          <th scope="col">First Name</th>
-                          <th scope="col">Last Name</th>
-                          <th scope="col">Age</th>
-                        </tr>
-                    </thead>
-                </table>
-            {% else %}
-            <p>No dog walkers registered yet.</p>
-            {% endfor %}
-        </ul>
-    </section>
+        {% if walkers_table %}
+        <div class="d-grid col-7 mx-auto">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Age</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for walker in walkers_table %}
+                    <tr>
+                        <td>{{ walker['Username'] }}</td>
+                        <td>{{ walker['First Name'] }}</td>
+                        <td>{{ walker['Last Name'] }}</td>
+                        <td>{{ walker['Age'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No dog walkers registered yet.</p>
+        {% endif %}
+    </section><br>
 </main>
 <script src="/static/js/signOut.js"></script>
 {% endblock %}

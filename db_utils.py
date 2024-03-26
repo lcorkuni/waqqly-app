@@ -53,3 +53,19 @@ def insert_user(user_data: dict) -> None:
         }
         walkers.insert_one(walker)
     logger.info(f"User {user['username']} successfully registered")
+
+
+def get_collection(collection):
+    cursor = collection.find({})
+    collection_content = []
+    for document in cursor:
+        collection_content.append(document)
+    return collection_content
+
+
+def get_username(user_id):
+    cursor = users.find({})
+    for document in cursor:
+        if document["_id"] == user_id:
+            return document["username"]
+    raise ValueError(f"User {user_id} not found")

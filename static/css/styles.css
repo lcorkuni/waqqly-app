@@ -11,17 +11,10 @@ html, body {
     background-color: #f0f0f0;
 }
 
-/* Header and Footer */
 header, footer {
     color: #ffffff;
     background-color: #198754;
 }
-
-/* div {
-    display: flex;
-    justify-content: center;
-} */
-
 
 header {
     display: flex;
@@ -55,25 +48,13 @@ footer {
 }
 
 form {
-    width: 90%; /* Use 90% of the container width */
+    width: 90%;
     max-width: 800px; /* Maximum width to prevent overly wide forms on large screens */
     margin: 0 auto; /* Center form horizontally */
 }
 
-/* Add padding to labels */
 label:not([for="radio-lab"]):not([for="ref-lab"]) {
     display: block;
-    margin-top: 15px; /* Add padding only above the label */
+    margin-top: 15px;
 }
 
-/* Add padding below the radio buttons */
-input[type="radio"] {
-    margin-top: 10px;
-}
-button {
-    margin-bottom:30px
-}
-
-#spinner {
-    display: none; /* Initially hide the spinner */
-}

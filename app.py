@@ -16,7 +16,7 @@ from fastapi.templating import Jinja2Templates
 
 from starlette.datastructures import MutableHeaders
 
-from db_utils import insert_user, users
+from db_utils import insert_user, users, get_collection, dogs, walkers, get_username
 from log_conf import logger
 from auth_utils import UserType, User, get_password_hash, get_current_user, authenticate_user, \
     create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
@@ -24,7 +24,7 @@ from auth_utils import UserType, User, get_password_hash, get_current_user, auth
 app = FastAPI(title="Wagg.ly", description="A dog walkers app", version="1.0")
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory=Path(__file__).parent.absolute() /
-          "static"), name="static")
+                                           "static"), name="static")
 
 
 @app.middleware("http")
@@ -111,13 +111,36 @@ async def error(request: Request, msg: str = None):
          status_code=HTTPStatus.OK,
          summary="Returns the Homepage Page HTML", tags=["Frontend"])
 async def homepage(request: Request, current_user: Annotated[User, Depends(get_current_user)]):
-    print(str(current_user.type))
-    return templates.TemplateResponse(name="homepage.html", context={"request": request, "username": current_user.username, "type": current_user.type.value})
+    dogs_collection = get_collection(dogs)
+    walkers_collection = get_collection(walkers)
+
+    dogs_table = []
+    for dog in dogs_collection:
+        dog_row = {"Owners Username": get_username(dog["owner_id"]),
+                   "Name": dog["name"],
+                   "Breed": dog["breed"],
+                   "Age": dog["age"]}
+        dogs_table.append(dog_row)
+
+    walkers_table = []
+    for walker in walkers_collection:
+        walker_row = {"Username": get_username(walker["user_id"]),
+                      "First Name": walker["first_name"],
+                      "Last Name": walker["last_name"],
+                      "Age": walker["age"]}
+        walkers_table.append(walker_row)
+
+    return templates.TemplateResponse(name="homepage.html",
+                                      context={"request": request,
+                                               "username": current_user.username,
+                                               "type": current_user.type.value,
+                                               "dogs_table": dogs_table,
+                                               "walkers_table": walkers_table})
 
 
 @app.post("/token", tags=["Backend"], response_class=JSONResponse)
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+        form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> JSONResponse:
     user = authenticate_user(
         users, form_data.username, form_data.password)
@@ -152,14 +175,14 @@ async def get_cookies(access_token: Optional[str] = Cookie(None)):
 
 @app.get("/users/me/", response_model=User, tags=["Dev"])
 async def read_users_me(
-    current_user: Annotated[User, Depends(get_current_user)]
+        current_user: Annotated[User, Depends(get_current_user)]
 ):
     return current_user
 
 
 @app.get("/users/me/items/", tags=["Dev"])
 async def read_own_items(
-    current_user: Annotated[User, Depends(get_current_user)]
+        current_user: Annotated[User, Depends(get_current_user)]
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
 
