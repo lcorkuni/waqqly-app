@@ -26,7 +26,7 @@ to log in, register users, or access the `/home` or `/docs`. You will be limited
    pip install -r requirements.txt
    ```
 3. **Set Environment Variables:**
-   Refer to report in Appendix A documentation how to set the environment variables.
+   Refer to report in Appendix A to find the enviroment variables that need setting.
 4. **Start the App:**
    ```bash
    python ./app.py
@@ -34,8 +34,8 @@ to log in, register users, or access the `/home` or `/docs`. You will be limited
 
 ## Azure CI/CD Pipeline
 
-The Waqqly Web App leverages Azure DevOps for a continuous integration and continuous delivery
+The Waqqly Web App leverages Azure DevOps for a continuous integration
 (CI/CD) pipeline. This automated process ensures efficient deployment:
 
-* Upon a code push to Azure DevOps, a new application version is automatically built.
+* Upon a code push to Azure DevOps, a new versio of the application is automatically built.
 * The built version is then deployed to the cloud environment.
