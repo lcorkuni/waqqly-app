@@ -6,6 +6,7 @@ owners with reliable walkers, allowing them to:
 * **Register and Login:** Create accounts and manage profiles.
 * **Browse Dog Walkers:** Search and discover dog walkers in their area.
 
+You can access the live version of the app running on Azure here: https://www.waqqly.uk
 
 ## Local Development
 
