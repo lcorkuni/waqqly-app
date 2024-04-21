@@ -1,26 +1,41 @@
-# Introduction
+## Waqqly Web App: Connecting Dog Owners and Walkers
 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.
+The Waqqly Web App is a cloud-based platform that simplifies dog walking coordination. It connects dog
+owners with reliable walkers, allowing them to:
 
-# Getting Started
+* **Register and Login:** Create accounts and manage profiles.
+* **Browse Dog Walkers:** Search and discover dog walkers in their area.
 
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
-1. Installation process
-2. Software dependencies
-3. Latest releases
-4. API references
+## Local Development
 
-# Build and Test
+**IMPORTANT, LIKELY LIMITED FUNCTIONALITY:** Due to security measures, local development has limitations.
+The database resides behind a private Azure endpoint and unless your local IP has been added to the
+endpoints configuration, you will not be able to access the database. This means you will not be able
+to log in, register users, or access the `/home` or `/docs`. You will be limited to accessing the
+`/login` and the `/register` endpoints
 
-TODO: Describe and show how to build your code and run the tests.
+**Prerequisites:**
 
-# Contribute
+* Python and pip installed on your system
 
-TODO: Explain how other users and developers can contribute to make your code better.
+**Running the App:**
+1. **Open a shell:** e.g. Powershell or GitBash
+2. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Set Environment Variables:**
+   Refer to report in Appendix A documentation how to set the environment variables.
+4. **Start the App:**
+   ```bash
+   python ./app.py
+   ```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
+## Azure CI/CD Pipeline
 
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+The Waqqly Web App leverages Azure DevOps for a continuous integration and continuous delivery
+(CI/CD) pipeline. This automated process ensures efficient deployment:
+
+* Upon a code push to Azure DevOps, a new application version is automatically built.
+* The built version is then deployed to the cloud environment.
